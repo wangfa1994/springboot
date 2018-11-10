@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "stu",
+      "type": "com.wf.setting.StudentBean",
+      "sourceType": "com.wf.setting.StudentBean"
+    }
+  ],
+  "properties": [
+    {
+      "name": "stu.age",
+      "type": "java.lang.Integer",
+      "sourceType": "com.wf.setting.StudentBean"
+    },
+    {
+      "name": "stu.name",
+      "type": "java.lang.String",
+      "sourceType": "com.wf.setting.StudentBean"
+    }
+  ],
+  "hints": []
+}

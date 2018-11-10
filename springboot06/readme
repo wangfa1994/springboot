@@ -1,0 +1,65 @@
+第六章 springboot 核心
+
+com.wf.springboot06包下知识点
+
+1. @SpringBootApplication 是spring boot 项目的核心注解，主要作用是开启自动配置。
+   是一个组合注解，@SpringBootConfiguration 和 @EnableAutoConfiguration 和 @ComponentScan 的组合注解。
+
+   @EnableAutoConfiguration 让springBoot 根据类路径中的jar包依赖为当前项目进行自动配置
+    例如添加spring-boot-starter-web的依赖，会自动添加Tomcat和springmvc的依赖，那么springboot就会对Tomcat和MVC进行自动配置。
+
+
+2. springboot 会自动扫描@SpringBootApplication注解所在类的同级包及以下包，所以一般将入口类的位置放置在包顶层。
+3. @SpringBootApplication 可以设置一些属性值进行指定包扫描，也可以关闭一些特定的配置(见源码属性值)
+
+
+
+4.springboot 的 全局配置文件是在resource下的application.properties或者是application.yml文件 。
+    yml是以数据为中心的语言，在配置数据的时候具有面向对象的特征。
+
+5. springboot 的全局配置文件的作用是对一些默认属性的配置进行修改(末尾有总结常用配置)
+        server.port=9090   // 端口号设置
+        server.servlet.context-path=/springboot    // 项目路径设置 注意2.x和1.x的区别
+
+6.spring-boot-starter-web等相关starter pom , 主要是为了消除相关配置文件及相关依赖，可以再maven依赖树查看。
+
+
+7.@ImportResource() spring 提供的注解 用来加载相关配置的xml文件。
+8.@PropertySource() spring 提供的注解 用来加载相关properties文件。 代码中可以引用properties中的值
+9.@RestController 和 @RequestMapping("/") 是springMVC相关注解
+
+
+com.wf.setting 包下知识点
+
+1. 常规属性配置 利用@Value("${name}") 注解进行属性值赋值，利用@PropertySource()将文件加载进来，注解用在启动类或者本类上都行，然后进行赋值。
+2. 类型安全配置 利用@ConfigurationProperties将properties文件与一个bean属性关联。2.x注意这个注解需要依赖spring-boot-configuration-processor,
+    并且要指定optional为true，见pom.xml配置
+
+3. spring boot 的日志配置 支持Log4j,Log4j2 和 logback日志框架，spring boot 已经为当前使用功能日志框架的控制台输出以及文件的输出做好了配置，
+    我们只需要在配置文件中进行一些自定义更改即可。是以logging为开头的一些配置
+
+4. profile 配置用于针对不同的环境(test,dev,prod)进行切换配置文件的。全局profile配置使用application-profile.properties 命名
+     总的配置文件还是application.properties，在主配置文件中引入不同的环境的配置文件(spring.profiles.active=dev)
+
+
+
+----
+spring boot 运行原理
+
+springboot 关于自动配置的源码在spring-boot-autoconfigure.jar中从导入的包中可以看到这个jar包，可以查看spring boot为我们自动配置了那些属性。
+通过 在总配置文件中添加debug = true 进行查看springboot帮我们自动配置的相关报告。
+
+springboot的入口类的注解@SpringBootApplication,这个组合注解她的核心功能是由@EnableAutoConfiguration提供
+在@EnableAutoConfiguration注解中有一个@Import注解，这个导入了AutoConfigurationImportSelector这个类
+在AutoConfigurationImportSelector类中，有 getAutoConfigurationEntry 这个方法，在这个方法中有这一行代码
+    List<String> configurations = this.getCandidateConfigurations(annotationMetadata, attributes);
+    这行代码调用了一个本地的方法，在这个方法中，是从我们的 META-INF/spring.factories 下的文件中读取需要加载的配置文件，我们可以在
+    spring-boot-autoconfigure的jar包中找到这个文件，并读取到我们要加载的相关配置文件 # Auto Configure，
+    打开任意一个，我们可能会发现类似于这样的@Condition***的注解，这个注解的主要是根据条件进行创建不同的bean。
+
+
+
+
+
+
+

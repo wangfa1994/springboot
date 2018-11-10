@@ -1,4 +1,4 @@
-package com.wf.springboot05;
+package com.wf.springboot06;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class Springboot05ApplicationTests {
+public class Springboot06ApplicationTests {
 
 	@Test
 	public void contextLoads() {
